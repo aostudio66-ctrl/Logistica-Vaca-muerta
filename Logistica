@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logística Vaca Muerta NQN - Transporte Industrial</title>
+    <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans">
+
+    <!-- CABECERA -->
+    <header class="bg-slate-900 border-b border-orange-500/30 p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-black tracking-wider text-orange-500">VACA MUERTA <span class="text-white font-light">LOGÍSTICA</span></h1>
+            <span class="bg-orange-500/10 text-orange-400 text-xs px-3 py-1 rounded-full border border-orange-500/20 font-mono">NQN Capital</span>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="bg-gradient-to-b from-slate-900 to-slate-950 py-20 px-4 text-center border-b border-slate-800">
+        <span class="text-orange-500 font-mono tracking-widest text-xs uppercase bg-orange-500/10 px-3 py-1 rounded-full">Soluciones Integrales de Transporte</span>
+        <h2 class="text-4xl md:text-5xl font-extrabold my-4 tracking-tight">Abastecimiento Estratégico para la Cuenca Neuquina</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto mb-8 text-base md:text-lg">Conectamos de forma eficiente el Parque Industrial de Neuquén con Añelo, yacimientos y puntos clave de la región con monitoreo y seguridad industrial.</p>
+        <a href="#cotizador-seccion" class="bg-orange-500 text-slate-950 font-bold px-8 py-3 rounded shadow-lg shadow-orange-500/20 hover:bg-orange-400 transition-all transform hover:-translate-y-0.5 inline-block">Probar Cotizador en Vivo</a>
+    </section>
+
+    <!-- COTIZADOR -->
+    <section id="cotizador-seccion" class="py-16 container mx-auto px-4 max-w-4xl">
+        <div class="bg-slate-900 rounded-xl border border-slate-800 p-6 md:p-8 shadow-2xl">
+            <div class="mb-6 border-b border-slate-800 pb-4">
+                <h3 class="text-xl font-bold text-amber-500"><!-- INICIO DEL COTIZADOR --> Cotizador Inteligente de Fletes <!-- FIN DEL COTIZADOR --></h3>
+                <p class="text-slate-400 text-sm mt-1">Simulador de tarifas operativas para operaciones B2B en la provincia.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">Destino (Desde PIN Neuquén)</label>
+                    <select id="selectDestino" class="w-full bg-slate-950 border border-slate-800 rounded p-3 text-slate-100 focus:outline-none focus:border-orange-500 transition">
+                        <option value="anelo">Añelo (Yacimiento Base)</option>
+                        <option value="rincon">Rincón de los Sauces</option>
+                        <option value="chanar">San Patricio del Chañar</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">Tipo de Equipo Requerido</label>
+                    <select id="selectEquipo" class="w-full bg-slate-950 border border-slate-800 rounded p-3 text-slate-100 focus:outline-none focus:border-orange-500 transition">
+                        <option value="hotshot">Hot-Shot 24h (Camioneta Express)</option>
+                        <option value="tolva">Tolva para Arena de Fractura</option>
+                        <option value="carreton">Carretón (Maquinaria Pesada)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- RESULTADO -->
+            <div class="mt-8 bg-slate-950 rounded-lg p-6 border border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <span class="text-xs font-mono text-slate-400 uppercase tracking-wider">Presupuesto Estimado</span>
+                    <div id="textoTotal" class="text-3xl font-black text-orange-500 mt-1">$120.000</div>
+                    <span id="textoDetalle" class="text-xs text-slate-500 block mt-1">Distancia estimada: 100 km</span>
+                </div>
+                <button id="btnWhatsapp" class="w-full md:w-auto bg-emerald-600 text-white font-bold px-6 py-3 rounded flex items-center justify-center gap-2 hover:bg-emerald-500 transition shadow-lg shadow-emerald-600/10">
+                    Enviar a Operaciones
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- LÓGICA DE JAVASCRIPT -->
+    <script>
+        const datosDestinos = {
+            anelo: { nombre: "Añelo", km: 100 },
+            rincon: { nombre: "Rincón de los Sauces", km: 240 },
+            chanar: { nombre: "San Patricio del Chañar", km: 50 }
+        };
+
+        const datosEquipos = {
+            hotshot: { nombre: "Hot-Shot 24h", tarifa: 1200 },
+            tolva: { nombre: "Tolva para Arena", tarifa: 2500 },
+            carreton: { nombre: "Carretón Pesado", tarifa: 4000 }
+        };
+
+        const selectDestino = document.getElementById('selectDestino');
+        const selectEquipo = document.getElementById('selectEquipo');
+        const textoTotal = document.getElementById('textoTotal');
+        const textoDetalle = document.getElementById('textoDetalle');
+        const btnWhatsapp = document.getElementById('btnWhatsapp');
+
+        function recalcular() {
+            const destino = datosDestinos[selectDestino.value];
+            const equipo = datosEquipos[selectEquipo.value];
+            
+            const total = destino.km * equipo.tarifa;
+            
+            textoTotal.innerText = '$' + total.toLocaleString('es-AR');
+            textoDetalle.innerText = `Distancia estimada a ${destino.nombre}: ${destino.km} km (${equipo.nombre})`;
+        }
+
+        function enviarMensaje() {
+            const destino = datosDestinos[selectDestino.value];
+            const equipo = datosEquipos[selectEquipo.value];
+            const total = (destino.km * equipo.tarifa).toLocaleString('es-AR');
+            
+            const mensaje = `Hola Vaca Muerta Logística. Solicito cotización para flete desde PIN Neuquén hacia ${destino.nombre} utilizando un equipo ${equipo.nombre}. Presupuesto estimado web: $${total}.`;
+            const url = `https://wa.me{encodeURIComponent(mensaje)}`;
+            
+            window.open(url, '_blank');
+        }
+
+        selectDestino.addEventListener('change', recalcular);
+        selectEquipo.addEventListener('change', recalcular);
+        btnWhatsapp.addEventListener('click', enviarMensaje);
+
+        // Ejecución inicial para calcular el primer valor por defecto
+        recalcular();
+    </script>
+</body>
+</html>
